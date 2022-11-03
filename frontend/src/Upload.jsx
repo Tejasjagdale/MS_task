@@ -13,7 +13,7 @@ const Upload = () => {
 
   function handleSubmit(event) {
     event.preventDefault();
-    const url = "http://localhost:5000/uploadFile";
+    const url = "http://localhost:5000/upload";
     const formData = new FormData();
     formData.append("file", file);
     formData.append("fileName", file.name);
@@ -32,8 +32,8 @@ const Upload = () => {
     <>
       <form onSubmit={handleSubmit}>
         <h1>React File Upload</h1>
-        <input type="file" onChange={handleChange} />
-        <button type="submit">Upload</button>
+        <input type="file" name="upload_file" onChange={handleChange} />
+        <button type="submit" >Upload</button>
       </form>
     </>
   );
