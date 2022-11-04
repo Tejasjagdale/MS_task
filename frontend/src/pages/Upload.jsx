@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { partial } from "filesize";
-import FileUpload from "./components/FileUpload";
 import { useEffect } from "react";
+import FileUpload from "../components/FileUpload";
 
 const Upload = () => {
   const [files, setFiles] = useState();

@@ -1,7 +1,7 @@
 import React, { Fragment, useState } from "react";
 import Message from "./Message";
 import axios from "axios";
-
+ 
 const FileUpload = () => {
   const [file, setFile] = useState("");
   const [filename, setFilename] = useState("Choose File");
@@ -16,6 +16,9 @@ const FileUpload = () => {
   const onSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData();
+    console.log(file);
+    // file.data = gzipSizeSync(file.data);
+    console.log(file);
     formData.append("file", file);
 
     try {

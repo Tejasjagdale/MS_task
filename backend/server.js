@@ -2,11 +2,12 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const mysql = require("mysql");
-const multer = require("multer");
+const compress = require('compression')
 var fileupload = require("express-fileupload");
 
 const app = express();
 app.use(fileupload());
+app.use(compress())
 
 var corsOptions = {
   origin: "http://localhost:3000",
@@ -56,7 +57,7 @@ app.get("/getfiles", (req, res) => {
   let sql = "SELECT * FROM fileupload";
   let query = db.query(sql, (err, result) => {
     if (err) throw err;
-    console.log(result);
+    // console.log(result);
     res.send(result);
   });
 });
