@@ -42,7 +42,7 @@ const FileUpload = () => {
       setMessage("File Uploaded");
 
       setTimeout(() => {
-        setMessage(null)
+        setMessage(null);
       }, 2000);
     } catch (err) {
       if (err.response.status === 500) {

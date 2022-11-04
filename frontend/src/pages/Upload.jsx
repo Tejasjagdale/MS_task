@@ -9,9 +9,15 @@ const Upload = () => {
   useEffect(() => {
     axios.get("http://localhost:5000/getfiles").then((response) => {
       setFiles(response.data);
-      console.log(response.data);
     });
   }, []);
+
+  const Delete = (index) => {
+    axios.get(`http://localhost:5000/deletefile/:${index}`).then((response) => {
+      console.log(response.data)
+      setFiles(response.data);
+    });
+  };
 
   useEffect(() => {
     console.log(files);
@@ -34,42 +40,52 @@ const Upload = () => {
       </div>
 
       <div className="container mt-4">
-      <table className="table">
-        <thead>
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">name</th>
-            <th scope="col">type</th>
-            <th scope="col">download</th>
-            <th scope="col">ts</th>
-          </tr>
-        </thead>
-        <tbody>
-          {files
-            ? files.map((file, index) => {
-                return (
-                  <tr key={index}>
-                    <th scope="row">{index + 1}</th>
-                    <td>{file.filename}</td>
-                    <td>{file.type}</td>
-                    <td>
-                      <button
-                        type="button"
-                        onClick={(e) =>
-                          Download(file.data, file.filename, file.type)
-                        }
-                        className="btn btn-success"
-                      >
-                        Download
-                      </button>
-                    </td>
-                    <td>{file.ts}</td>
-                  </tr>
-                );
-              })
-            : ""}
-        </tbody>
-      </table>
+        <table className="table">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">name</th>
+              <th scope="col">type</th>
+              <th scope="col">download</th>
+              <th scope="col">delete</th>
+              <th scope="col">ts</th>
+            </tr>
+          </thead>
+          <tbody>
+            {files
+              ? files.map((file, index) => {
+                  return (
+                    <tr key={index}>
+                      <th scope="row">{index + 1}</th>
+                      <td>{file.filename}</td>
+                      <td>{file.type}</td>
+                      <td>
+                        <button
+                          type="button"
+                          onClick={(e) =>
+                            Download(file.data, file.filename, file.type)
+                          }
+                          className="btn btn-success"
+                        >
+                          Download
+                        </button>
+                      </td>
+                      <td>
+                        <button
+                          type="button"
+                          onClick={(e) => Delete(file.index)}
+                          className="btn btn-danger"
+                        >
+                          Delete
+                        </button>
+                      </td>
+                      <td>{file.ts}</td>
+                    </tr>
+                  );
+                })
+              : ""}
+          </tbody>
+        </table>
       </div>
     </>
   );

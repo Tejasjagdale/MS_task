@@ -60,6 +60,15 @@ app.get("/getfiles", (req, res) => {
   });
 });
 
+app.get("/deletefile/:id", (req, res) => {
+  console.log(+req.params.id.split(":")[1]);
+  let sql = `DELETE FROM fileupload WHERE id=${+req.params.id.split(":")[1]}`;
+  let query = db.query(sql, (err, result) => {
+    if (err) throw err;
+    res.send(result);
+  });
+});
+
 // set port, listen for requests
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
