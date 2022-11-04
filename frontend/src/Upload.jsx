@@ -1,40 +1,75 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { partial } from "filesize";
+import FileUpload from "./components/FileUpload";
+import { useEffect } from "react";
 
 const Upload = () => {
-  const [file, setFile] = useState();
-  const size = partial({ base: 2, standard: "jedec" });
-  size(265318);
+  const [files, setFiles] = useState();
 
-  function handleChange(event) {
-    setFile(event.target.files[0]);
-  }
-
-  function handleSubmit(event) {
-    event.preventDefault();
-    const url = "http://localhost:5000/upload";
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("fileName", file.name);
-    const config = {
-      headers: {
-        "content-type": "multipart/form-data",
-      },
-    };
-
-    axios.post(url, formData, config).then((response) => {
+  useEffect(() => {
+    axios.get("http://localhost:5000/getfiles").then((response) => {
+      setFiles(response.data);
       console.log(response.data);
     });
-  }
+  }, []);
+
+  useEffect(() => {
+    console.log(files);
+  }, [files]);
+
+  const Download = (res, name, type) => {
+    var data = new Blob([res], { type: type });
+    var csvURL = window.URL.createObjectURL(data);
+    var tempLink = document.createElement("a");
+    tempLink.href = csvURL;
+    tempLink.setAttribute("download", name);
+    tempLink.click();
+  };
 
   return (
     <>
-      <form onSubmit={handleSubmit}>
-        <h1>React File Upload</h1>
-        <input type="file" name="upload_file" onChange={handleChange} />
-        <button type="submit" >Upload</button>
-      </form>
+      <div className="container mt-4">
+        <h4 className="display-4 text-center mb-4">MS File Upload</h4>
+        <FileUpload />
+      </div>
+
+      <table className="table">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">name</th>
+            <th scope="col">type</th>
+            <th scope="col">download</th>
+            <th scope="col">ts</th>
+          </tr>
+        </thead>
+        <tbody>
+          {files
+            ? files.map((file, index) => {
+                return (
+                  <tr key={index}>
+                    <th scope="row">{index + 1}</th>
+                    <td>{file.filename}</td>
+                    <td>{file.type}</td>
+                    <td>
+                      <button
+                        type="button"
+                        onClick={(e) =>
+                          Download(file.data, file.filename, file.type)
+                        }
+                        className="btn btn-success"
+                      >
+                        Download
+                      </button>
+                    </td>
+                    <td>{file.ts}</td>
+                  </tr>
+                );
+              })
+            : ""}
+        </tbody>
+      </table>
     </>
   );
 };
