@@ -1,7 +1,8 @@
 import React, { Fragment, useState } from "react";
 import Message from "./Message";
 import axios from "axios";
- 
+import imageCompression from "browser-image-compression";
+
 const FileUpload = () => {
   const [file, setFile] = useState("");
   const [filename, setFilename] = useState("Choose File");
@@ -16,10 +17,16 @@ const FileUpload = () => {
   const onSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData();
-    console.log(file);
-    // file.data = gzipSizeSync(file.data);
-    console.log(file);
-    formData.append("file", file);
+    const options = {
+      maxSizeMB: 1,
+      useWebWorker: true,
+    };
+    formData.append("name", file.name);
+    try {
+      formData.append("file", await imageCompression(file, options));
+    } catch (error) {
+      formData.append("file", file);
+    }
 
     try {
       const res = await axios.post("http://localhost:5000/upload", formData, {
@@ -33,6 +40,10 @@ const FileUpload = () => {
       setUploadedFile({ fileName, filePath });
 
       setMessage("File Uploaded");
+
+      setTimeout(() => {
+        setMessage(null)
+      }, 2000);
     } catch (err) {
       if (err.response.status === 500) {
         setMessage("There was a problem with the server");

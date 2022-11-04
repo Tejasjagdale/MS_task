@@ -2,12 +2,12 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const mysql = require("mysql");
-const compress = require('compression')
+const compress = require("compression");
 var fileupload = require("express-fileupload");
 
 const app = express();
 app.use(fileupload());
-app.use(compress())
+app.use(compress());
 
 var corsOptions = {
   origin: "http://localhost:3000",
@@ -43,9 +43,7 @@ app.post("/upload", (req, res) => {
 
   const file = req.files.file;
 
-  console.log(file);
-
-  let post = { filename: file.name, type: file.mimetype, data: file.data };
+  let post = { filename: req.body.name, type: file.mimetype, data: file.data };
   let sql = "INSERT INTO fileupload SET ?";
   let query = db.query(sql, post, (err, result) => {
     if (err) throw err;

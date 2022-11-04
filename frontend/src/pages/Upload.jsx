@@ -33,6 +33,7 @@ const Upload = () => {
         <FileUpload />
       </div>
 
+      <div className="container mt-4">
       <table className="table">
         <thead>
           <tr>
@@ -69,6 +70,7 @@ const Upload = () => {
             : ""}
         </tbody>
       </table>
+      </div>
     </>
   );
 };
